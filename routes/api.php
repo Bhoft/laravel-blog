@@ -15,44 +15,28 @@ use App\Http\Controllers\ArticleController;
 |
 */
 
-Route::get('/helloworld', function () {
-    return response()->json(['message' => 'hello world'], 200);
-});
-
-
-// in laravel 8 the routes have been changed the complete namespace is needed
-// doesn't work (controller is not invokeable?)
-// Route::get('articles', ArticleController::class, 'index');
-
-// works
-// Route::get('articles', 'App\Http\Controllers\ArticleController@index');
-
-// Route::get('articles',  [ArticleController::class, 'index']);
-// Route::get('posts',  [PostController::class, 'index']);
-
-
-
-
-// articles routes public
+// articles public routes
 Route::get('articles', [ArticleController::class, 'index']);
 Route::get('articles/{id}', [ArticleController::class, 'findArticle']);
+Route::get('articles/slug/{slug}', [ArticleController::class, 'findBySlug']);
 
+
+// protected routes which would be added behind auth
+
+// create an article
 Route::post('articles', [ArticleController::class, 'store']);
+
+// update an article
 Route::put('articles/{id}', [ArticleController::class, 'update']);
+
+// delete an article
 Route::delete('articles/{id}', [ArticleController::class, 'destroy']);
 
-
+//set publish date to now for an  article (e.g. quick publish via some button)
 Route::put('articles/{id}/publish', [ArticleController::class, 'publish']);
 
-
+// only test
 Route::get('articles/{id}/updateAge', [ArticleController::class, 'updateAge']);
-
-
-// added to update
-// Route::put('articles/{id}/publish-on', [ArticleController::class, 'publishOnDate']);
-
-
-
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

@@ -15,6 +15,7 @@ use App\Repositories\Eloquent\Criteria\LatestFirst;
 
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Exception\RequestException;
+use Ramsey\Uuid\Type\Integer;
 
 class ArticleController extends Controller
 {
@@ -28,7 +29,7 @@ class ArticleController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return App\Http\Resources\ArticleListResource
      */
     public function index()
     {
@@ -48,7 +49,7 @@ class ArticleController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return App\Http\Resources\ArticleResource
      */
     public function store(Request $request)
     {
@@ -58,7 +59,6 @@ class ArticleController extends Controller
             'publication_date' => ['date'],
             'expire_at' => ['date'],
             'tags' => ['required'],
-
         ]);
 
         // would require login which i don't have
@@ -72,30 +72,56 @@ class ArticleController extends Controller
         $article->body = $request->body;
         $article->publication_date = $request->publication_date;
         $article->expire_at = $request->expire_at;
+        $article->slug = Str::slug($request->title);
 
         // later login user
         $article->user_id = $request->user_id;
         $article->save();
 
+
+        // apply tags
+        $article = $this->articles->applyTags($article->id, $request->tags);
+
         return new ArticleResource($article);
     }
 
 
-    public function findArticle(Request $request, $id)
+    /**
+     * findArticle
+     * find Article by id
+     *
+     * @param  int $id
+     * @return App\Http\Resources\ArticleResource
+     */
+    public function findArticle(int $id): ArticleResource
     {
         $article = $this->articles->find($id);
         return new ArticleResource($article);
     }
 
     /**
+     * findBySlug
+     * Get Article by slug for public view
+     *
+     * @param  mixed $slug
+     * @return ArticleResource
+     */
+    public function findBySlug(string $slug): ArticleResource
+    {
+        $article = $this->articles->findWhereFirst('slug', $slug);
+        return new ArticleResource($article);
+    }
+
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Article  $article
-     * @return \Illuminate\Http\Response
+
+     * @return ArticleResource
      */
     // public function update(Request $request, Article $article)
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id): ArticleResource
     {
         $article = $this->articles->find($id);
         // $this->authorize('update', $article);
@@ -103,10 +129,9 @@ class ArticleController extends Controller
         $this->validate($request, [
             'title' => ['required', 'string', 'max:255'],
             'body' => ['required', 'string'],
-
             'publication_date' => ['date'],
             'expire_at' => ['date'],
-            // 'publication_date' => 'date|after:tomorrow'
+            'tags' => ['required'],
         ]);
 
         $article = $this->articles->update($id, [
@@ -117,6 +142,8 @@ class ArticleController extends Controller
             'slug' => Str::slug($request->title),
         ]);
 
+
+        // apply tags
         $article = $this->articles->applyTags($id, $request->tags);
 
         return new ArticleResource($article);
@@ -140,15 +167,12 @@ class ArticleController extends Controller
         return response()->json(['message' => 'Record deleted'], 200);
     }
 
-    /*
-    automatically publish directly
-    */
-
     /**
      * publish
+     * publish an article by id by setting the current date
      *
      * @param  mixed $id
-     * @return void
+     * @return ArticleResource
      */
     public function publish($id)
     {
