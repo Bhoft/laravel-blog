@@ -197,34 +197,4 @@ class ArticleController extends Controller
 
         return new ArticleResource($article);
     }
-
-    /**
-     * updateAge
-     *
-     * @param  mixed $id
-     * @return void
-     */
-    public function updateAge($id)
-    {
-        $article = $this->articles->find($id);
-
-        $name = $article->user->name;
-
-        $client = new \GuzzleHttp\Client(['headers' => ['Accept' => 'application/json']]);
-        $url = 'https://api.agify.io?name=' . $name;
-
-        $res = $client->request('GET', $url, []);
-
-        if ($res->getStatusCode() == 200) {
-            if ($res->getBody()) {
-                $result = json_decode($res->getBody(), true);
-            }
-            if (isset($result['age'])) {
-                $this->user->age = (int) $result['age'];
-                $this->user->save();
-            }
-        }
-
-        return new ArticleResource($article);
-    }
 }

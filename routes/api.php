@@ -35,10 +35,6 @@ Route::delete('articles/{id}', [ArticleController::class, 'destroy']);
 //set publish date to now for an  article (e.g. quick publish via some button)
 Route::put('articles/{id}/publish', [ArticleController::class, 'publish']);
 
-// only test
-Route::get('articles/{id}/updateAge', [ArticleController::class, 'updateAge']);
-
-
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });

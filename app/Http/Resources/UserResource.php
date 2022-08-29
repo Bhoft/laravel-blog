@@ -24,8 +24,7 @@ class UserResource extends JsonResource
             $this->mergeWhen(auth()->check() && auth()->id() === $this->id, [
                 'email' => $this->email,
             ]),
-
-            // 'articles' => $this->articles,
+            'age' => $this->age,
             'articles' => ArticleResource::collection($this->whenLoaded('articles')),
             'created_dates' => [
                 'created_at' => $this->created_at,
