@@ -54,7 +54,7 @@ class ArticleController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'title' => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:255', 'unique:articles,title'],
             'body' => ['required', 'string'],
             'publication_date' => ['date'],
             'expire_at' => ['date'],
@@ -127,7 +127,7 @@ class ArticleController extends Controller
         // $this->authorize('update', $article);
 
         $this->validate($request, [
-            'title' => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:255', 'unique:articles,title,' . $id],
             'body' => ['required', 'string'],
             'publication_date' => ['date'],
             'expire_at' => ['date'],
