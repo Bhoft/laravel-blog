@@ -14,8 +14,8 @@ class IsLive implements ICriterion
             // ->where('expire', '>', Carbon::now())
             // ->orWhereNull('expire')
             ->where(function ($query) {
-                return $query->where('expire', '>=', Carbon::now())
-                    ->orWhereNull('expire');;
+                return $query->where('expire_at', '>=', Carbon::now())
+                    ->orWhereNull('expire_at');;
             });
     }
 }

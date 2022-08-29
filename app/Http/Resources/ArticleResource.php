@@ -31,8 +31,10 @@ class ArticleResource extends JsonResource
                 'tagsListNormalized' => $this->tagListNormalized,
                 'tagsList' => $this->tagList,
             ],
-            'expire' => $this->expire,
-
+            'expire_dates' => !is_null($this->expire_at) ? [
+                'expire_at' => $this->expire_at,
+                'expire_at_human' => $this->expire_at->diffForHumans(),
+            ] : null,
             'created_dates' => [
                 'created_at' => $this->created_at,
                 'created_at_human' => $this->created_at->diffForHumans(),

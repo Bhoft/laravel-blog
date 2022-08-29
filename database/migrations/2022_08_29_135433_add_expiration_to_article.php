@@ -14,7 +14,7 @@ class AddExpirationToArticle extends Migration
     public function up()
     {
         Schema::table('articles', function (Blueprint $table) {
-            $table->timestamp('expire')->nullable();
+            $table->timestamp('expire_at')->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class AddExpirationToArticle extends Migration
     public function down()
     {
         Schema::table('articles', function (Blueprint $table) {
-            $table->dropColumn(['expire']);
+            $table->dropColumn(['expire_at']);
         });
     }
 }

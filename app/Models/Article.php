@@ -11,12 +11,25 @@ class Article extends Model
     use HasFactory;
     use Taggable;
 
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'publication_date',
+        'expire_at'
+    ];
+
     protected $fillable = [
         'user_id',
         'title',
         'body',
         'publication_date',
-        'expire',
+        'expire_at',
         'slug',
     ];
 

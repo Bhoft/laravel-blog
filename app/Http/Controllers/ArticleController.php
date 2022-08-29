@@ -56,7 +56,7 @@ class ArticleController extends Controller
             'title' => ['required', 'string', 'max:255'],
             'body' => ['required', 'string'],
             'publication_date' => ['date'],
-            'expire' => ['date'],
+            'expire_at' => ['date'],
             'tags' => ['required'],
 
         ]);
@@ -71,7 +71,7 @@ class ArticleController extends Controller
         $article->title = $request->title;
         $article->body = $request->body;
         $article->publication_date = $request->publication_date;
-        $article->expire = $request->expire;
+        $article->expire_at = $request->expire_at;
 
         // later login user
         $article->user_id = $request->user_id;
@@ -105,7 +105,7 @@ class ArticleController extends Controller
             'body' => ['required', 'string'],
 
             'publication_date' => ['date'],
-            'expire' => ['date'],
+            'expire_at' => ['date'],
             // 'publication_date' => 'date|after:tomorrow'
         ]);
 
@@ -113,7 +113,7 @@ class ArticleController extends Controller
             'title' => $request->title,
             'body' => $request->body,
             'publication_date' => $request->publication_date,
-            'expire' => $request->expire,
+            'expire_at' => $request->expire_at,
             'slug' => Str::slug($request->title),
         ]);
 
