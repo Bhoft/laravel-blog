@@ -40,6 +40,13 @@ class ArticleRepository extends BaseRepository implements IArticle
             $query->where('user_id', (int) $request->byAuthor);
         }
 
+        // query by Tags
+        if ($request->byTag) {
+            // e.g. 'Apple,Banana'
+            // dd($request->byTag);
+            $query->withAnyTags($request->byTag);
+        }
+
         // search title and description for provided string
         if ($request->q) {
             $query->where(function ($q) use ($request) {
@@ -57,9 +64,7 @@ class ArticleRepository extends BaseRepository implements IArticle
             $query->latest();
         }
 
-        // debug sql query
-        // check if in development mode
-
+        // debug sql query if in development mode
         if ($request->_debug && config('app.debug')) {
             $sql = str_replace(array('?'), array('\'%s\''), $query->toSql());
             $sql = vsprintf($sql, $query->getBindings());

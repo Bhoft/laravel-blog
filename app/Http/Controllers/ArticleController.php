@@ -225,10 +225,6 @@ class ArticleController extends Controller
             }
         }
 
-        // $article = $this->update($id, [
-        //     'publication_date' => Carbon::now(),
-        // ]);
-
         return new ArticleResource($article);
     }
 }
