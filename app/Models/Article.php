@@ -17,6 +17,7 @@ class Article extends Model
         'body',
         'publication_date',
         'expire',
+        'slug',
     ];
 
     public function user()
