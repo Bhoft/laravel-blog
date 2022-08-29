@@ -13,10 +13,6 @@ use App\Repositories\Eloquent\ArticleRepository;
 use App\Repositories\Eloquent\Criteria\EagerLoad;
 use App\Repositories\Eloquent\Criteria\LatestFirst;
 
-use Psr\Http\Message\ResponseInterface;
-use GuzzleHttp\Exception\RequestException;
-use Ramsey\Uuid\Type\Integer;
-
 class ArticleController extends Controller
 {
     protected $articles;
@@ -112,6 +108,24 @@ class ArticleController extends Controller
         return new ArticleResource($article);
     }
 
+    /**
+     * search
+     * search for Articles
+
+     * @param  mixed $request
+     * @return void
+     */
+    public function search(Request $request)
+    {
+        $articles = $this->articles->withCriteria([
+            new LatestFirst(),
+            new IsLive(),
+            new EagerLoad(['user']),
+        ])->search($request);
+
+        // $articles = $this->articles->search($request);
+        return ArticleResource::collection($articles);
+    }
 
     /**
      * Update the specified resource in storage.

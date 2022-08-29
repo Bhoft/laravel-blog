@@ -19,7 +19,7 @@ use App\Http\Controllers\ArticleController;
 Route::get('articles', [ArticleController::class, 'index']);
 Route::get('articles/{id}', [ArticleController::class, 'findArticle']);
 Route::get('articles/slug/{slug}', [ArticleController::class, 'findBySlug']);
-
+Route::get('search/articles', [ArticleController::class, 'search']);
 
 // protected routes which would be added behind auth
 

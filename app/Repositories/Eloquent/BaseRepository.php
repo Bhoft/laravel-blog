@@ -24,10 +24,6 @@ abstract class BaseRepository implements IBase, ICriteria
 
     public function all()
     {
-        // return $this->model->all();
-        // switch to get() after developing our criteria
-        // to use the querybuilder which
-        // does the same as all();
         return $this->model->get();
     }
 
@@ -71,12 +67,10 @@ abstract class BaseRepository implements IBase, ICriteria
     }
 
 
-
     protected function getModelClass()
     {
         if (!method_exists($this, 'model')) {
             throw new ModelNotDefined();
-            // throw new Exception("no model defined", 1);
         }
 
         // return namespace of that model
