@@ -9,12 +9,13 @@ class IsLive implements ICriterion
 {
     public function apply($model)
     {
-        return $model->where('publication_date', '<=', Carbon::now())
-            //   ->whereNull('expire')
+        return $model
+            ->where('publication_date', '<=', Carbon::now())
             // ->where('expire', '>', Carbon::now())
+            // ->orWhereNull('expire')
             ->where(function ($query) {
-                return $query->where('expire', '>', Carbon::now())
-                    ->orWhereNull('expire');
+                return $query->where('expire', '>=', Carbon::now())
+                    ->orWhereNull('expire');;
             });
     }
 }

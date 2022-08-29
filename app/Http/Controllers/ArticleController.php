@@ -38,7 +38,6 @@ class ArticleController extends Controller
         $articles = $this->articles->withCriteria([
             new LatestFirst(),
             new IsLive(),
-            // new ForUser(1),
             new EagerLoad(['user']),
         ])->all();
 
@@ -56,6 +55,9 @@ class ArticleController extends Controller
         $this->validate($request, [
             'title' => ['required', 'string', 'max:255'],
             'body' => ['required', 'string'],
+            'publication_date' => ['date'],
+            'expire' => ['date'],
+
         ]);
 
         // would require login which i don't have
@@ -67,6 +69,8 @@ class ArticleController extends Controller
         $article = new Article;
         $article->title = $request->title;
         $article->body = $request->body;
+        $article->publication_date = $request->publication_date;
+        $article->expire = $request->expire;
 
         // later login user
         $article->user_id = $request->user_id;

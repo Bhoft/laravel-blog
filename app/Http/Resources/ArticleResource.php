@@ -19,6 +19,9 @@ class ArticleResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'body' => $this->body,
+
+            'expire' => $this->expire,
+
             'created_dates' => [
                 'created_at' => $this->created_at,
                 'created_at_human' => $this->created_at->diffForHumans(),
@@ -27,7 +30,6 @@ class ArticleResource extends JsonResource
                 'updated_at' => $this->updated_at,
                 'updated_at_human' => $this->updated_at->diffForHumans(),
             ],
-
             // 'publication_date_human' => $this->publication_date->diffForHumans(),
             'publish_dates' => !is_null($this->publication_date) ? [
                 'publication_date' => $this->publication_date,

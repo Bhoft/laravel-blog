@@ -21,6 +21,7 @@ class ArticleListResource extends ArticleResource
 
             // don't include body
             // 'body' => $this->body,
+            'expire' => $this->expire,
 
             'created_dates' => [
                 'created_at' => $this->created_at,
