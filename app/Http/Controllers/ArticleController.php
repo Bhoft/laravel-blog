@@ -57,6 +57,7 @@ class ArticleController extends Controller
             'body' => ['required', 'string'],
             'publication_date' => ['date'],
             'expire' => ['date'],
+            'tags' => ['required'],
 
         ]);
 
@@ -113,10 +114,11 @@ class ArticleController extends Controller
             'body' => $request->body,
             'publication_date' => $request->publication_date,
             'expire' => $request->expire,
-            // 'slug' => Str::slug($request->title),
+            'slug' => Str::slug($request->title),
         ]);
 
-        $article = $this->articles->find($id);
+        $article = $this->articles->applyTags($id, $request->tags);
+
         return new ArticleResource($article);
     }
 
@@ -141,6 +143,13 @@ class ArticleController extends Controller
     /*
     automatically publish directly
     */
+
+    /**
+     * publish
+     *
+     * @param  mixed $id
+     * @return void
+     */
     public function publish($id)
     {
         $article = $this->articles->find($id);
@@ -151,6 +160,12 @@ class ArticleController extends Controller
         return new ArticleResource($article);
     }
 
+    /**
+     * updateAge
+     *
+     * @param  mixed $id
+     * @return void
+     */
     public function updateAge($id)
     {
         $article = $this->articles->find($id);

@@ -19,7 +19,18 @@ class ArticleResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'body' => $this->body,
+            'slug' => $this->slug,
 
+            'tag_list' => [
+                // tags as array
+                'tags' => $this->tagArray,
+                'normalized' => $this->tagArrayNormalized,
+
+                // or instead tags as list "seperated"
+                //"tagsList": "Photoshop,Adobe Illustrator,Landscape"
+                'tagsListNormalized' => $this->tagListNormalized,
+                'tagsList' => $this->tagList,
+            ],
             'expire' => $this->expire,
 
             'created_dates' => [
